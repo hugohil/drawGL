@@ -1,0 +1,8 @@
+{
+  "name": "drawGL",
+  "version": "1.0.0",
+  "description": "basic drawing surface for WebGL",
+  "main": "index.js",
+  "author": "hugohil",
+  "license": "MIT"
+}
