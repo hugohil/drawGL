@@ -8,6 +8,7 @@ canvasRender.width = window.innerWidth
 canvasRender.height = window.innerHeight
 canvasRender.style.backgroundColor = 'rgb(255, 100, 0)'
 document.body.appendChild(canvasRender)
+document.body.style.margin = 0
 
 const gl = canvasRender.getContext('webgl')
 

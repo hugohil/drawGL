@@ -9,6 +9,7 @@ module.exports = class DrawingSurface {
     this.positionLocation = gl.getAttribLocation(this.shader, 'a_position')
     this.texcoordLocation = gl.getAttribLocation(this.shader, 'a_texcoord')
     this.matrixLocation = gl.getUniformLocation(this.shader, 'u_matrix')
+    this.textureLocation = gl.getUniformLocation(this.shader, 'u_texture')
     this.resolutionLocation = gl.getUniformLocation(this.shader, 'u_resolution')
     this.timeLocation = gl.getUniformLocation(this.shader, 'u_time')
 
@@ -83,17 +84,47 @@ module.exports = class DrawingSurface {
     gl.enableVertexAttribArray(this.texcoordLocation)
     gl.vertexAttribPointer(this.texcoordLocation, 2, gl.FLOAT, false, 0, 0)
 
-    // // this matrix will convert from pixels to clip space
-    // let matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1)
-    // // this matrix will translate our quad to dstX, dstY
-    // matrix = m4.translate(matrix, 0, 0, 0)
-    // // this matrix will scale our 1 unit quad from 1 unit to texWidth, texHeight units
-    // matrix = m4.scale(matrix, gl.canvas.width, gl.canvas.height, 1)
-    // // Set the matrix.
-    // gl.uniformMatrix4fv(this.matrixLocation, false, matrix)
-
     let matrix = m4.orthographic(0, 1, 1, 0, -1, 1)
     gl.uniformMatrix4fv(this.matrixLocation, false, matrix)
+
+    // update resolution
+    gl.uniform2f(this.resolutionLocation, resolution[0], resolution[1])
+
+    // update time
+    gl.uniform1f(this.timeLocation, time)
+
+    // draw the quad (2 triangles, 6 vertices)
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
+  }
+
+  drawTexture (gl, time, resolution, tex) {
+    gl.bindTexture(gl.TEXTURE_2D, tex)
+
+    gl.useProgram(this.shader)
+
+    // Setup the attributes to pull data from our buffers
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer)
+    gl.enableVertexAttribArray(this.positionLocation)
+    gl.vertexAttribPointer(this.positionLocation, 2, gl.FLOAT, false, 0, 0)
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.texcoordBuffer)
+    gl.enableVertexAttribArray(this.texcoordLocation)
+    gl.vertexAttribPointer(this.texcoordLocation, 2, gl.FLOAT, false, 0, 0)
+
+    // this matrix will convert from pixels to clip space
+    let matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1)
+    // this matrix will translate our quad to dstX, dstY
+    matrix = m4.translate(matrix, 0, 0, 0)
+    // this matrix will scale our 1 unit quad from 1 unit to texWidth, texHeight units
+    matrix = m4.scale(matrix, gl.canvas.width, gl.canvas.height, 1)
+    // Set the matrix.
+    gl.uniformMatrix4fv(this.matrixLocation, false, matrix)
+
+    // let matrix = m4.orthographic(0, 1, 1, 0, -1, 1)
+    // gl.uniformMatrix4fv(this.matrixLocation, false, matrix)
+
+    // Tell the shader to get the texture from texture unit 0
+    gl.uniform1i(this.textureLocation, 0)
 
     // update resolution
     gl.uniform2f(this.resolutionLocation, resolution[0], resolution[1])

@@ -124,18 +124,18 @@ module.exports = {
     ]
   },
   translate (m, tx, ty, tz) {
-    return m4.multiply(m, m4.translation(tx, ty, tz))
+    return this.multiply(m, this.translation(tx, ty, tz))
   },
   xRotate (m, angleInRadians) {
-    return m4.multiply(m, m4.xRotation(angleInRadians))
+    return this.multiply(m, this.xRotation(angleInRadians))
   },
   yRotate (m, angleInRadians) {
-    return m4.multiply(m, m4.yRotation(angleInRadians))
+    return this.multiply(m, this.yRotation(angleInRadians))
   },
   zRotate (m, angleInRadians) {
-    return m4.multiply(m, m4.zRotation(angleInRadians))
+    return this.multiply(m, this.zRotation(angleInRadians))
   },
   scale (m, sx, sy, sz) {
-    return m4.multiply(m, m4.scaling(sx, sy, sz))
+    return this.multiply(m, this.scaling(sx, sy, sz))
   }
 }
